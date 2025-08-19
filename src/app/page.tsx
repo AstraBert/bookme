@@ -1,103 +1,133 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { Button } from "@/components/ui/button"
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Calendar } from "@/components/ui/calendar"
+import { useState } from "react"
+import { Send, CalendarCheck } from "lucide-react"
+import Link from "next/link"
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerClose, DrawerDescription, DrawerFooter, DrawerTitle } from "@/components/ui/drawer"
+import { ChangeEvent } from "react"
+
+const HomePage = () => {
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [time, setTime] = useState<string>("10:30")
+  const [email, setEmail] = useState<string>("")
+  const [name, setName] = useState<string>("")
+
+  const handleSubmit = () => {
+    console.log("Selected date:", date)
+    console.log("Selected time:", time)
+    // Handle form submission here
+  }
+
+  const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedTime = e.target.value
+    const minTime = "09:00"
+    const maxTime = "11:45"
+
+    if (selectedTime < minTime || selectedTime > maxTime) {
+      alert("Please select a time between 9:00 and 11:45 (Central European Time)")
+      return
+    }
+
+    setTime(selectedTime)
+  }
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputText = e.target.value
+    setEmail(inputText)
+  }
+
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputText = e.target.value
+    setName(inputText)
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Card className="flex w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Book a Spot🗓️</CardTitle>
+          <CardDescription>Choose a date and a time, and I&apos;ll let you know if it works!</CardDescription>
+          <CardAction>
+            <Link href={"https://link.clelia.dev"}>
+              <Button variant="link">All My Links</Button>
+            </Link>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+            <div className="flex flex-col gap-6">
+              <div className="grid gap-2 justify-center">
+                <Label htmlFor="date" className="justify-center">Choose a Date</Label>
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  className="rounded-md border shadow-sm"
+                  captionLayout="dropdown"
+                />
+              </div>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="time-picker" className="px-1">
+                    Time
+                  </Label>
+                  <Input
+                    type="time"
+                    id="time-picker"
+                    min="09:00"
+                    max="11:45"
+                    value={time}
+                    onChange={handleTimeChange}
+                    className="bg-background"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+        </CardContent>
+        <CardFooter className="flex-col gap-2">
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button className="w-full">
+                Reach out 
+                <Send />
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+            <DrawerHeader className="gap-y-2">
+              <DrawerTitle>Wait, I need to know who you are!</DrawerTitle>
+              <DrawerDescription>You thought I forgot, uh?👀</DrawerDescription>
+              <Label className="justify-center">Your Name:</Label>
+              <Input 
+              placeholder="Your Name"
+              onChange={handleNameChange}
+              />
+              <Label className="justify-center">Your Email:</Label>
+              <Input 
+              type="email"
+              placeholder="your@email.com"
+              onChange={handleEmailChange}
+              />
+            </DrawerHeader>
+            <DrawerFooter>
+              <Button onClick={handleSubmit}>
+                Reach out! (For real this time)
+                <CalendarCheck />
+              </Button>
+              <DrawerClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+          </Drawer>
+        </CardFooter>
+      </Card>
     </div>
-  );
+  )
 }
+
+export default HomePage
