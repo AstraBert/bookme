@@ -5,22 +5,33 @@ import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader,
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Calendar } from "@/components/ui/calendar"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { Send, CalendarCheck } from "lucide-react"
 import Link from "next/link"
 import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerClose, DrawerDescription, DrawerFooter, DrawerTitle } from "@/components/ui/drawer"
 import { ChangeEvent } from "react"
+import { sendEmails } from "@/utils/supabase/edge-function"
 
 const HomePage = () => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [time, setTime] = useState<string>("10:30")
   const [email, setEmail] = useState<string>("")
   const [name, setName] = useState<string>("")
+  const drawerCloseRef = useRef<HTMLButtonElement>(null)
 
-  const handleSubmit = () => {
-    console.log("Selected date:", date)
-    console.log("Selected time:", time)
-    // Handle form submission here
+  const handleSubmit = async () => {
+    if (typeof date === "undefined") {
+      alert("You need to choose a date before submitting your request")
+      return
+    }
+    const isSucess = await sendEmails(date, time, email, name)
+    if (!isSucess) {
+      alert("There was an error while processing your request, please try again later...")
+      return
+    }
+    alert("Your request was successfully submitted! You will soon receive an email...")
+    drawerCloseRef.current?.click()
+    return
   }
 
   const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +58,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-white via-blue-200 to-blue-400">
       <Card className="flex w-full max-w-sm">
         <CardHeader>
           <CardTitle>Book a Spot🗓️</CardTitle>
@@ -118,7 +129,7 @@ const HomePage = () => {
                 Reach out! (For real this time)
                 <CalendarCheck />
               </Button>
-              <DrawerClose asChild>
+              <DrawerClose asChild ref={drawerCloseRef}>
                 <Button variant="outline">Cancel</Button>
               </DrawerClose>
             </DrawerFooter>
